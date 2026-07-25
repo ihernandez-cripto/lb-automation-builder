@@ -1,5 +1,3 @@
----
-
 ```markdown
 # Load Balancer Automation Builder (LB Automation Builder) 🚀
 

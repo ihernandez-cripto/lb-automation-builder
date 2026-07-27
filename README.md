@@ -214,3 +214,4 @@ Este proyecto está distribuido bajo la licencia MIT. Consulta el archivo `LICEN
 ```
 
 ```
+![alt text](image.png)

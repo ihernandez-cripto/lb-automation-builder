@@ -208,9 +208,21 @@ lb-automation-builder/
 ---
 ## Interfaz Web
 
-Este es un ejemplo del uso de la aplicación, con la interfaz web:
-lb_web/imagen/app_ONE.png
----
+La interfaz web permite ingresar parámetros de configuración de SmartVista Load Balancer y enviar la petición al backend de agentes.
+
+- El usuario completa los campos de IP, puerto, rango y `mhdr`.
+- El frontend envía la solicitud a `POST /api/generate-config`.
+- El backend devuelve la configuración validada, la documentación técnica en Markdown y el enlace simulado a OCI.
+
+Ejemplo de uso:
+
+1. Abrir `index.html` en el navegador o usar Live Server en Visual Studio Code.
+2. Completar los campos de la forma con los datos de la regla.
+3. Presionar el botón **Procesar con Agentes Backend**.
+4. Revisar la salida generada y descargar los archivos si es necesario.
+
+![Interfaz Web](lb_web/imagen/app_ONE.png)
+
 ---
 
 ## 🤝 Contribuciones

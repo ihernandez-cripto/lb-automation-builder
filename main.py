@@ -12,13 +12,17 @@ from langgraph.checkpoint.sqlite import SqliteSaver
 
 warnings.filterwarnings("ignore", message=".*TqdmWarning.*")
 
-# 1. Cargar variables de entorno
+import os
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+
+# 1. Cargar el archivo .env
 load_dotenv()
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-
-if not GEMINI_API_KEY:
-    raise ValueError("No se encontró GEMINI_API_KEY o GOOGLE_API_KEY en el archivo .env")
+# 2. Verificar que la API Key existe
+api_key = os.getenv("GOOGLE_API_KEY")
+if not api_key:
+    raise ValueError("⚠️ No se encontró GOOGLE_API_KEY en el archivo .env")
 
 # 2. Definir el Estado del Flujo Multiagente (AgentState)
 class AgentState(TypedDict):
@@ -44,7 +48,7 @@ class SVLBRuleSchema(BaseModel):
 model = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     temperature=0,
-    google_api_key=GEMINI_API_KEY
+    google_api_key=api_key
 )
 
 conn = sqlite3.connect("checkpoints.db", check_same_thread=False)

@@ -22,6 +22,7 @@ El sistema procesa requerimientos operativos expresados en lenguaje natural o pa
 - [Instalación y Configuración](#-instalación-y-configuración)
 - [Ejecución](#-ejecución)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Interfaz Web](#-interfaz-web)
 - [Contribuciones](#-contribuciones)
 - [Licencia](#-licencia)
 
@@ -204,7 +205,12 @@ lb-automation-builder/
 └── README.md                   # Documentación del proyecto
 
 ```
+---
+## Interfaz Web
 
+Este es un ejemplo del uso de la aplicación, con la interfaz web:
+lb_web/imagen/app_ONE.png
+---
 ---
 
 ## 🤝 Contribuciones

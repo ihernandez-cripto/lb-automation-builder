@@ -1,8 +1,3 @@
-Aquí tienes el archivo **`README.md`** actualizado para reflejar la integración de la **nueva interfaz web cliente-servidor** (Frontend HTML/JS + FastAPI Backend API) dentro de la arquitectura multiagente del proyecto.
-
----
-
-```markdown
 # Load Balancer Automation Builder (LB Automation Builder) 🚀
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
@@ -38,33 +33,33 @@ El proyecto integra una **Capa Cliente (Frontend Web)** comunicada asíncronamen
 
 ```text
 [ Cliente Web / Frontend HTML5 + JS ]
-                 │
-                 │ (POST /api/generate-config)
-                 ▼
-┌──────────────────────────────────────────────────────────┐
-│              BACKEND API (FastAPI Orchestrator)          │
-│                                                          │
-│                 +---------------+                        │
-│                 | Router Node   |<-------------------+   │
-│                 +-------+-------+                    |   │
-│                         |                            |   │
-│    +--------------------+--------------------+       |   │
-│    |            |               |            |       |   │
-│    v            v               v            v       |   │
-│ +-----+      +-----+         +-----+      +-----+    |   │
-│ |Ingr.|      |Const|         |Valid|      |Docum|    |   │
-│ |Agent|      |Agent|         |Agent|      |Agent|    |   │
-│ +--+--+      +--+--+         +--+--+      +--+--+    |   │
-│    |            |               |            |       |   │
-│    +------------+---------------+------------+       |   │
-│                         | (Validación OK + Doc)      |   │
-│                         v                            |   │
-│                 +---------------+                    |   │
-│                 |  Supervisor   |--------------------+   │
-│                 +-------+-------+                        │
-│                         |                                │
-└─────────────────────────┼────────────────────────────────┘
-                          ▼
+                 �?
+                 �?(POST /api/generate-config)
+                 �?
+┌──────────────────────────────────────────────────────────�?
+�?             BACKEND API (FastAPI Orchestrator)          �?
+�?                                                         �?
+�?                +---------------+                        �?
+�?                | Router Node   |<-------------------+   �?
+�?                +-------+-------+                    |   �?
+�?                        |                            |   �?
+�?   +--------------------+--------------------+       |   �?
+�?   |            |               |            |       |   �?
+�?   v            v               v            v       |   �?
+�?+-----+      +-----+         +-----+      +-----+    |   �?
+�?|Ingr.|      |Const|         |Valid|      |Docum|    |   �?
+�?|Agent|      |Agent|         |Agent|      |Agent|    |   �?
+�?+--+--+      +--+--+         +--+--+      +--+--+    |   �?
+�?   |            |               |            |       |   �?
+�?   +------------+---------------+------------+       |   �?
+�?                        | (Validación OK + Doc)      |   �?
+�?                        v                            |   �?
+�?                +---------------+                    |   �?
+�?                |  Supervisor   |--------------------+   �?
+�?                +-------+-------+                        �?
+�?                        |                                �?
+└─────────────────────────┼────────────────────────────────�?
+                          �?
            [ Respuesta JSON / Config SVLB ]
 
 ```
@@ -191,16 +186,16 @@ uvicorn app:app --reload --port 8000
 ```text
 lb-automation-builder/
 ├── config/
-│   └── settings.py             # Configuración general de variables y claves API
+�?  └── settings.py             # Configuración general de variables y claves API
 ├── schemas/
-│   ├── lb_schema.py            # Esquema Pydantic SmartVistaLBRule
-│   └── router_schema.py        # Esquema de decisión para RouterDecision
+�?  ├── lb_schema.py            # Esquema Pydantic SmartVistaLBRule
+�?  └── router_schema.py        # Esquema de decisión para RouterDecision
 ├── nodes/
-│   ├── router.py               # Lógica del nodo enrutador
-│   ├── agents.py               # Nodos de agentes (Ingress, Constructor, Validator, Documenter)
-│   └── supervisor.py           # Nodo final de consolidación
+�?  ├── router.py               # Lógica del nodo enrutador
+�?  ├── agents.py               # Nodos de agentes (Ingress, Constructor, Validator, Documenter)
+�?  └── supervisor.py           # Nodo final de consolidación
 ├── tools/
-│   └── oci_tools.py            # Herramientas de integración con Oracle Cloud Infrastructure
+�?  └── oci_tools.py            # Herramientas de integración con Oracle Cloud Infrastructure
 ├── app.py                      # Servidor backend API (FastAPI) y orquestación de endpoints
 ├── graph.py                    # Ensamble de nodos y bordes condicionales en LangGraph
 ├── main.py                     # Punto de entrada para ejecución por CLI

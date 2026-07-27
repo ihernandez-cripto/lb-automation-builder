@@ -1,4 +1,3 @@
-```
 # Load Balancer Automation Builder (LB Automation Builder) ??
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
@@ -7,9 +6,9 @@
 ![Validation](https://img.shields.io/badge/Validation-Pydantic-green.svg)
 ![Infrastructure](https://img.shields.io/badge/Cloud-Oracle%20Cloud%20(OCI)-red.svg)
 
-**LB Automation Builder** es un sistema orquestado por una **arquitectura multiagente distribuida** sobre **LangGraph** y expuesto mediante una **API REST (FastAPI) + Interfaz Web interactiva**. Dise?ado para automatizar el ciclo de vida de administraci®Æn, configuraci®Æn, validaci®Æn y documentaci®Æn de reglas para **SmartVista Load Balancer (SVLB)**.
+**LB Automation Builder** es un sistema orquestado por una **arquitectura multiagente distribuida** sobre **LangGraph** y expuesto mediante una **API REST (FastAPI) + Interfaz Web interactiva**. Dise?ado para automatizar el ciclo de vida de administraciËªän, configuraciËªän, validaciËªän y documentaciËªän de reglas para **SmartVista Load Balancer (SVLB)**.
 
-El sistema procesa requerimientos operativos expresados en lenguaje natural o par®¢metros t®¶cnicos desde un formulario din®¢mico web, los convierte en objetos JSON validados contra las especificaciones de SmartVista (ip, puertos, `mhdr`, etc.), genera documentaci®Æn t®¶cnica en formato Markdown y simula/ejecuta la subida de paquetes de configuraci®Æn a contenedores de **Oracle Cloud Infrastructure (OCI)**.
+El sistema procesa requerimientos operativos expresados en lenguaje natural o parËäçmetros tË∞∑cnicos desde un formulario dinËäçmico web, los convierte en objetos JSON validados contra las especificaciones de SmartVista (ip, puertos, `mhdr`, etc.), genera documentaciËªän tË∞∑cnica en formato Markdown y simula/ejecuta la subida de paquetes de configuraciËªän a contenedores de **Oracle Cloud Infrastructure (OCI)**.
 
 ---
 
@@ -18,10 +17,10 @@ El sistema procesa requerimientos operativos expresados en lenguaje natural o pa
 - [Arquitectura del Sistema](#-arquitectura-del-sistema)
 - [Flujo de Trabajo (Workflow)](#-flujo-de-trabajo-workflow)
 - [Estructura de Agentes](#-estructura-de-agentes)
-- [Esquema de Datos y Validaci®Æn](#-esquema-de-datos-y-validaci®Æn)
+- [Esquema de Datos y ValidaciËªän](#-esquema-de-datos-y-validaciËªän)
 - [Requisitos Previos](#-requisitos-previos)
-- [Instalaci®Æn y Configuraci®Æn](#-instalaci®Æn-y-configuraci®Æn)
-- [Ejecuci®Æn](#-ejecuci®Æn)
+- [InstalaciËªän y ConfiguraciËªän](#-instalaciËªän-y-configuraciËªän)
+- [EjecuciËªän](#-ejecuciËªän)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Contribuciones](#-contribuciones)
 - [Licencia](#-licencia)
@@ -30,37 +29,37 @@ El sistema procesa requerimientos operativos expresados en lenguaje natural o pa
 
 ## ?? Arquitectura del Sistema
 
-El proyecto integra una **Capa Cliente (Frontend Web)** comunicada as®™ncronamente v®™a HTTP/JSON con un **Servidor de Agentes (FastAPI + LangGraph)**. La orquestaci®Æn backend sustituye los flujos secuenciales r®™gidos por un **grafo determinista con agentes especializados**.
+El proyecto integra una **Capa Cliente (Frontend Web)** comunicada asËµ§ncronamente vËµ§a HTTP/JSON con un **Servidor de Agentes (FastAPI + LangGraph)**. La orquestaciËªän backend sustituye los flujos secuenciales rËµ§gidos por un **grafo determinista con agentes especializados**.
 
 ```text
 [ Cliente Web / Frontend HTML5 + JS ]
-                 ©¶
-                 ©¶ (POST /api/generate-config)
-                 ®ã
-©∞©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©¥
-©¶              BACKEND API (FastAPI Orchestrator)          ©¶
-©¶                                                          ©¶
-©¶                 +---------------+                        ©¶
-©¶                 | Router Node   |<-------------------+   ©¶
-©¶                 +-------+-------+                    |   ©¶
-©¶                         |                            |   ©¶
-©¶    +--------------------+--------------------+       |   ©¶
-©¶    |            |               |            |       |   ©¶
-©¶    v            v               v            v       |   ©¶
-©¶ +-----+      +-----+         +-----+      +-----+    |   ©¶
-©¶ |Ingr.|      |Const|         |Valid|      |Docum|    |   ©¶
-©¶ |Agent|      |Agent|         |Agent|      |Agent|    |   ©¶
-©¶ +--+--+      +--+--+         +--+--+      +--+--+    |   ©¶
-©¶    |            |               |            |       |   ©¶
-©¶    +------------+---------------+------------+       |   ©¶
-©¶                         | (Validaci®Æn OK + Doc)      |   ©¶
-©¶                         v                            |   ©¶
-©¶                 +---------------+                    |   ©¶
-©¶                 |  Supervisor   |--------------------+   ©¶
-©¶                 +-------+-------+                        ©¶
-©¶                         |                                ©¶
-©∏©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©‡©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©§©º
-                          ®ã
+                 Â≤´
+                 Â≤´ (POST /api/generate-config)
+                 ÔøΩ
+Â∫öÂ≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â∫ñ
+Â≤´              BACKEND API (FastAPI Orchestrator)          Â≤´
+Â≤´                                                          Â≤´
+Â≤´                 +---------------+                        Â≤´
+Â≤´                 | Router Node   |<-------------------+   Â≤´
+Â≤´                 +-------+-------+                    |   Â≤´
+Â≤´                         |                            |   Â≤´
+Â≤´    +--------------------+--------------------+       |   Â≤´
+Â≤´    |            |               |            |       |   Â≤´
+Â≤´    v            v               v            v       |   Â≤´
+Â≤´ +-----+      +-----+         +-----+      +-----+    |   Â≤´
+Â≤´ |Ingr.|      |Const|         |Valid|      |Docum|    |   Â≤´
+Â≤´ |Agent|      |Agent|         |Agent|      |Agent|    |   Â≤´
+Â≤´ +--+--+      +--+--+         +--+--+      +--+--+    |   Â≤´
+Â≤´    |            |               |            |       |   Â≤´
+Â≤´    +------------+---------------+------------+       |   Â≤´
+Â≤´                         | (ValidaciËªän OK + Doc)      |   Â≤´
+Â≤´                         v                            |   Â≤´
+Â≤´                 +---------------+                    |   Â≤´
+Â≤´                 |  Supervisor   |--------------------+   Â≤´
+Â≤´                 +-------+-------+                        Â≤´
+Â≤´                         |                                Â≤´
+Âº©Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏ÊãàÂ≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏Â≤∏ÂΩº
+                          ÔøΩ
            [ Respuesta JSON / Config SVLB ]
 
 ```
@@ -69,39 +68,39 @@ El proyecto integra una **Capa Cliente (Frontend Web)** comunicada as®™ncronamen
 
 ## ?? Flujo de Trabajo (Workflow)
 
-1. **Ingreso (Frontend / API):** El usuario ingresa una solicitud v®™a interfaz web (formulario estructurado) o en lenguaje natural.
-2. **Interpretaci®Æn:** El **Ingress Agent** valida los par®¢metros iniciales o traduce la solicitud a especificaciones de red (`raddr`, `lport`, `mhdr`).
-3. **Generaci®Æn:** El **Constructor Agent** arma el bloque de c®Ædigo JSON respetando el est®¢ndar del manual de SmartVista Load Balancer.
-4. **Validaci®Æn y Autorreparaci®Æn:** El **Validator Agent** eval®≤a la sintaxis mediante esquemas Pydantic (`SmartVistaLBRule`). Si se identifican errores de rango, sintaxis de cabecera o puerto, activa el sub-ciclo de reparaci®Æn.
-5. **Documentaci®Æn & Cloud:** El **Documenter Agent** crea la ficha t®¶cnica en Markdown y emite los enlaces del repositorio en OCI Object Storage.
-6. **Consolidaci®Æn:** El **Supervisor** presenta la configuraci®Æn t®¶cnica validada (`node_config`, `rule_src_config`) y la retorna a la interfaz web para su visualizaci®Æn/descarga.
+1. **Ingreso (Frontend / API):** El usuario ingresa una solicitud vËµ§a interfaz web (formulario estructurado) o en lenguaje natural.
+2. **InterpretaciËªän:** El **Ingress Agent** valida los parËäçmetros iniciales o traduce la solicitud a especificaciones de red (`raddr`, `lport`, `mhdr`).
+3. **GeneraciËªän:** El **Constructor Agent** arma el bloque de cËªädigo JSON respetando el estËäçndar del manual de SmartVista Load Balancer.
+4. **ValidaciËªän y AutorreparaciËªän:** El **Validator Agent** evalËøÜa la sintaxis mediante esquemas Pydantic (`SmartVistaLBRule`). Si se identifican errores de rango, sintaxis de cabecera o puerto, activa el sub-ciclo de reparaciËªän.
+5. **DocumentaciËªän & Cloud:** El **Documenter Agent** crea la ficha tË∞∑cnica en Markdown y emite los enlaces del repositorio en OCI Object Storage.
+6. **ConsolidaciËªän:** El **Supervisor** presenta la configuraciËªän tË∞∑cnica validada (`node_config`, `rule_src_config`) y la retorna a la interfaz web para su visualizaciËªän/descarga.
 
 ---
 
 ## ?? Estructura de Agentes
 
-| Agente / Nodo | Funci®Æn Principal | Salida Producida |
+| Agente / Nodo | FunciËªän Principal | Salida Producida |
 | --- | --- | --- |
-| **Router Node** | Eval®≤a el estado del grafo y toma la decisi®Æn determinista de enrutamiento mediante un esquema Pydantic. | `next_node` ("ingress", "constructor", "validator", "documenter", "supervisor") |
-| **Ingress Agent** | Extrae requerimientos t®¶cnicos (IP, puerto, rango, protocolo, `mhdr`) a partir del payload API o lenguaje natural. | `raw_requirements` |
-| **Constructor Agent** | Genera la definici®Æn estructural de la regla en JSON compatible con SmartVista (`node_config`, `rule_src_config`). | `generated_json_config` |
-| **Validator Agent (Repairer)** | Valida sint®¢cticamente el JSON contra el esquema Pydantic `SmartVistaLBRule` y reglas del protocolo (`CDb4`, `BHb2`, `visa`, `amex`, etc.). Repara el JSON si hay fallas. | `validation_status` (Boolean), `validation_errors` |
-| **Documenter Agent** | Redacta la ficha t®¶cnica y coordina las llamadas a herramientas externas (OCI Object Storage API). | `final_documentation`, `oci_object_link` |
+| **Router Node** | EvalËøÜa el estado del grafo y toma la decisiËªän determinista de enrutamiento mediante un esquema Pydantic. | `next_node` ("ingress", "constructor", "validator", "documenter", "supervisor") |
+| **Ingress Agent** | Extrae requerimientos tË∞∑cnicos (IP, puerto, rango, protocolo, `mhdr`) a partir del payload API o lenguaje natural. | `raw_requirements` |
+| **Constructor Agent** | Genera la definiciËªän estructural de la regla en JSON compatible con SmartVista (`node_config`, `rule_src_config`). | `generated_json_config` |
+| **Validator Agent (Repairer)** | Valida sintËäçcticamente el JSON contra el esquema Pydantic `SmartVistaLBRule` y reglas del protocolo (`CDb4`, `BHb2`, `visa`, `amex`, etc.). Repara el JSON si hay fallas. | `validation_status` (Boolean), `validation_errors` |
+| **Documenter Agent** | Redacta la ficha tË∞∑cnica y coordina las llamadas a herramientas externas (OCI Object Storage API). | `final_documentation`, `oci_object_link` |
 | **Supervisor Node** | Redacta la respuesta final y devuelve la estructura JSON/Markdown consolidada al endpoint de la API. | `generated_config` + `messages` |
 
 ---
 
-## ?? Esquema de Datos y Validaci®Æn
+## ?? Esquema de Datos y ValidaciËªän
 
-Toda configuraci®Æn generada cumple con los tipos de datos requeridos por la estructura base de **SmartVista Load Balancer**.
+Toda configuraciËªän generada cumple con los tipos de datos requeridos por la estructura base de **SmartVista Load Balancer**.
 
 ```python
 class SmartVistaLBRule(BaseModel):
-    ip: str = Field(description="Direcci®Æn IP destino o 0.0.0.0 para cualquier origen.")
+    ip: str = Field(description="DirecciËªän IP destino o 0.0.0.0 para cualquier origen.")
     port: str = Field(description="Puerto individual (ej. 10000) o rango de puertos (ej. 20001-20005).")
     range_count: Optional[str] = Field(default=None, description="Cantidad de conexiones consecutivas en rango (ej. 10/BHb2).")
     mhdr_preset: str = Field(description="Tipo o formato de enmarcado de cabecera (CDb4, BHb2, visa, amex, custom).")
-    custom_mhdr: Optional[str] = Field(default=None, description="Sintaxis de cabecera gen®¶rica personalizada (ej. x800BHb2).")
+    custom_mhdr: Optional[str] = Field(default=None, description="Sintaxis de cabecera genË∞∑rica personalizada (ej. x800BHb2).")
 
 ```
 
@@ -111,7 +110,7 @@ class SmartVistaLBRule(BaseModel):
 
 * **Python:** 3.10 o superior.
 * **OpenAI API Key:** Acceso a modelos GPT-4o o equivalentes.
-* **Librer®™as Clave:**
+* **LibrerËµ§as Clave:**
 * `fastapi`
 * `uvicorn`
 * `langgraph`
@@ -123,7 +122,7 @@ class SmartVistaLBRule(BaseModel):
 
 ---
 
-## ?? Instalaci®Æn y Configuraci®Æn
+## ?? InstalaciËªän y ConfiguraciËªän
 
 1. **Clonar el repositorio:**
 
@@ -150,7 +149,7 @@ pip install -r requirements.txt
 ```
 
 4. **Configurar variables de entorno:**
-Crea un archivo `.env` en la ra®™z del proyecto:
+Crea un archivo `.env` en la raËµ§z del proyecto:
 
 ```env
 OPENAI_API_KEY="tu-api-key-aqui"
@@ -160,9 +159,9 @@ OCI_COMPARTMENT_ID="ocid1.compartment.oc1.."  # Opcional para despliegue OCI rea
 
 ---
 
-## ?? Ejecuci®Æn
+## ?? EjecuciËªän
 
-El proyecto consta de dos partes: el servicio backend API de agentes y la interfaz gr®¢fica de usuario.
+El proyecto consta de dos partes: el servicio backend API de agentes y la interfaz grËäçfica de usuario.
 
 ### 1. Iniciar el Backend (FastAPI + LangGraph)
 
@@ -173,12 +172,12 @@ uvicorn app:app --reload --port 8000
 
 ```
 
-*El backend quedar®¢ escuchando en `http://127.0.0.1:8000` y desplegar®¢ la documentaci®Æn interactiva en `http://127.0.0.1:8000/docs`.*
+*El backend quedarËäç escuchando en `http://127.0.0.1:8000` y desplegarËäç la documentaciËªän interactiva en `http://127.0.0.1:8000/docs`.*
 
 ### 2. Iniciar la Interfaz Web (Frontend)
 
-* Abre el archivo `index.html` directamente en tu navegador o mediante la extensi®Æn **Live Server** en Visual Studio Code.
-* Configura los par®¢metros de IP, Puerto y Cabecera (`mhdr`) y haz clic en **Procesar con Agentes Backend**.
+* Abre el archivo `index.html` directamente en tu navegador o mediante la extensiËªän **Live Server** en Visual Studio Code.
+* Configura los parËäçmetros de IP, Puerto y Cabecera (`mhdr`) y haz clic en **Procesar con Agentes Backend**.
 
 ---
 
@@ -186,23 +185,23 @@ uvicorn app:app --reload --port 8000
 
 ```text
 lb-automation-builder/
-©¿©§©§ config/
-©¶   ©∏©§©§ settings.py             # Configuraci®Æn general de variables y claves API
-©¿©§©§ schemas/
-©¶   ©¿©§©§ lb_schema.py            # Esquema Pydantic SmartVistaLBRule
-©¶   ©∏©§©§ router_schema.py        # Esquema de decisi®Æn para RouterDecision
-©¿©§©§ nodes/
-©¶   ©¿©§©§ router.py               # L®Ægica del nodo enrutador
-©¶   ©¿©§©§ agents.py               # Nodos de agentes (Ingress, Constructor, Validator, Documenter)
-©¶   ©∏©§©§ supervisor.py           # Nodo final de consolidaci®Æn
-©¿©§©§ tools/
-©¶   ©∏©§©§ oci_tools.py            # Herramientas de integraci®Æn con Oracle Cloud Infrastructure
-©¿©§©§ app.py                      # Servidor backend API (FastAPI) y orquestaci®Æn de endpoints
-©¿©§©§ graph.py                    # Ensamble de nodos y bordes condicionales en LangGraph
-©¿©§©§ main.py                     # Punto de entrada para ejecuci®Æn por CLI
-©¿©§©§ index.html                  # Interfaz web cliente (HTML5/CSS3/JavaScript)
-©¿©§©§ requirements.txt            # Dependencias del proyecto
-©∏©§©§ README.md                   # Documentaci®Æn del proyecto
+ÂøµÂ≤∏Â≤∏ config/
+Â≤´   Âº©Â≤∏Â≤∏ settings.py             # ConfiguraciËªän general de variables y claves API
+ÂøµÂ≤∏Â≤∏ schemas/
+Â≤´   ÂøµÂ≤∏Â≤∏ lb_schema.py            # Esquema Pydantic SmartVistaLBRule
+Â≤´   Âº©Â≤∏Â≤∏ router_schema.py        # Esquema de decisiËªän para RouterDecision
+ÂøµÂ≤∏Â≤∏ nodes/
+Â≤´   ÂøµÂ≤∏Â≤∏ router.py               # LËªägica del nodo enrutador
+Â≤´   ÂøµÂ≤∏Â≤∏ agents.py               # Nodos de agentes (Ingress, Constructor, Validator, Documenter)
+Â≤´   Âº©Â≤∏Â≤∏ supervisor.py           # Nodo final de consolidaciËªän
+ÂøµÂ≤∏Â≤∏ tools/
+Â≤´   Âº©Â≤∏Â≤∏ oci_tools.py            # Herramientas de integraciËªän con Oracle Cloud Infrastructure
+ÂøµÂ≤∏Â≤∏ app.py                      # Servidor backend API (FastAPI) y orquestaciËªän de endpoints
+ÂøµÂ≤∏Â≤∏ graph.py                    # Ensamble de nodos y bordes condicionales en LangGraph
+ÂøµÂ≤∏Â≤∏ main.py                     # Punto de entrada para ejecuciËªän por CLI
+ÂøµÂ≤∏Â≤∏ index.html                  # Interfaz web cliente (HTML5/CSS3/JavaScript)
+ÂøµÂ≤∏Â≤∏ requirements.txt            # Dependencias del proyecto
+Âº©Â≤∏Â≤∏ README.md                   # DocumentaciËªän del proyecto
 
 ```
 
@@ -210,13 +209,13 @@ lb-automation-builder/
 
 ## ?? Contribuciones
 
-Las contribuciones son bienvenidas. Para cambios mayores, abre un *issue* primero para discutir lo que te gustar®™a modificar o mejorar.
+Las contribuciones son bienvenidas. Para cambios mayores, abre un *issue* primero para discutir lo que te gustarËµ§a modificar o mejorar.
 
 ---
 
 ## ?? Licencia
 
-Este proyecto est®¢ distribuido bajo la licencia MIT. Consulta el archivo `LICENSE` para m®¢s detalles.
+Este proyecto estËäç distribuido bajo la licencia MIT. Consulta el archivo `LICENSE` para mËäçs detalles.
 
 ```
 

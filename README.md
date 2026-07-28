@@ -23,6 +23,7 @@ El sistema procesa requerimientos operativos expresados en lenguaje natural o pa
 - [Ejecución](#-ejecución)
 - [Estructura del Proyecto](#-estructura-del-proyecto)
 - [Interfaz Web](#-interfaz-web)
+- [Despliegue en Oracle Cloud Infrastructure (OCI)](#-despliegue-oci)
 - [Contribuciones](#-contribuciones)
 - [Licencia](#-licencia)
 
@@ -224,7 +225,164 @@ Ejemplo de uso:
 ![Interfaz Web](lb_web/imagen/app_ONE.png)
 
 ---
+---
+## ☁️ Despliegue en Oracle Cloud Infrastructure (OCI)
 
+El proyecto está diseñado para ser desplegado en instancias **OCI Compute** (Oracle Linux 8/9 / RHEL) integrándose con servicios de red y almacenamiento de OCI.
+
+### 🏛 Arquitectura de Despliegue
+
+```text
+[ Cliente Web / Navegador ]
+           │
+           │ (HTTP / Puerto 80 o 8000)
+           ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    ORACLE CLOUD INFRASTRUCTURE                  │
+│                                                                 │
+│  ┌────────────────────────┐         ┌────────────────────────┐  │
+│  │ OCI Security List      │         │ OCI Compute (VM)       │  │
+│  │  - Ingress TCP: 80     │         │  - Firewall / firewalld│  │
+│  │  - Ingress TCP: 8000   │────────►│  - Nginx (Frontend)    │  │
+│  └────────────────────────┘         │  - Uvicorn (FastAPI)   │  │
+│                                     │  - LangGraph Flow      │  │
+│  ┌────────────────────────┐         └───────────┬────────────┘  │
+│  │ OCI Object Storage     │                     │               │
+│  │  - Documentación SVLB  │◄────────────────────┘               │
+│  └────────────────────────┘                                     │
+└─────────────────────────────────────────────────────────────────┘
+
+```
+
+---
+
+### 📋 Prerrequisitos de Infraestructura OCI
+
+1. **Instancia Compute**: Shape `VM.Standard.A1.Flex` u equivalente con sistema operativo Oracle Linux o Ubuntu.
+2. **Virtual Cloud Network (VCN)**: Reglas de Entrada (*Ingress Rules*) habilitadas en la **Security List**:
+* **CIDR de origen:** `0.0.0.0/0`
+* **IP Protocol:** `TCP`
+* **Puertos de destino:** `80` (HTTP) y `8000` (FastAPI / Uvicorn API).
+
+
+
+---
+
+### 🚀 Pasos de Instalación y Despliegue en la VM
+
+#### 1. Conexión SSH a la Instancia
+
+Asegúrate de conectarte utilizando el usuario predeterminado de Oracle Linux (`opc`) y tu clave privada SSH:
+
+```bash
+ssh -i /ruta/a/tu/clave_privada.key opc@<IP_PUBLICA_OCI>
+
+```
+
+#### 2. Configurar Espacio SWAP (Memoria Virtual de Protección)
+
+Para prevenir bloqueos del kernel por falta de memoria RAM (*Out of Memory / OOM Killer*) durante la instalación de paquetes con `pip`, habilita 2 GB de memoria SWAP:
+
+```bash
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+```
+
+#### 3. Clonar Repositorio e Instalar Dependencias
+
+```bash
+git clone [https://github.com/ihernandez-cripto/lb-automation-builder.git](https://github.com/ihernandez-cripto/lb-automation-builder.git)
+cd lb-automation-builder
+
+# Crear y activar entorno virtual
+python3 -m venv venv
+source venv/bin/activate
+
+# Instalar dependencias optimizando el uso de memoria RAM
+pip install --no-cache-dir -r requirements.txt
+
+```
+
+#### 4. Configuración de Variables de Entorno
+
+Crea el archivo `.env` en la raíz del proyecto:
+
+```bash
+cat << 'EOF' > .env
+OPENAI_API_KEY="tu-api-key-de-openai"
+OCI_COMPARTMENT_ID="ocid1.compartment.oc1.." # Opcional si se integran herramientas de OCI SDK
+EOF
+
+```
+
+#### 5. Configuración del Firewall Interno (firewalld)
+
+Abre el puerto de la API en el firewall del SO en Oracle Linux:
+
+```bash
+sudo firewall-cmd --permanent --add-port=8000/tcp
+sudo firewall-cmd --reload
+
+```
+
+---
+
+### ⚙️ Automatización del Servicio Backend (Systemd)
+
+Para garantizar la ejecución continua del backend FastAPI en OCI, configura un servicio de `systemd`:
+
+1. Crear el archivo de servicio:
+
+```bash
+sudo nano /etc/systemd/system/svlb-backend.service
+
+```
+
+2. Agregar la siguiente configuración:
+
+```ini
+[Unit]
+Description=SVLB Multi-Agent FastAPI Backend
+After=network.target
+
+[Service]
+User=opc
+WorkingDirectory=/home/opc/lb-automation-builder
+ExecStart=/home/opc/lb-automation-builder/venv/bin/uvicorn app:app --host 0.0.0.0 --port 8000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+```
+
+3. Activar e iniciar el servicio:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now svlb-backend
+
+```
+
+---
+
+### 🌐 Configurar la IP del Servidor en el Frontend
+
+Antes de desplegar la interfaz web, asegúrate de actualizar la URL del endpoint en el archivo `index.html` para que apunte a la IP pública de tu instancia de OCI:
+
+```javascript
+// index.html
+const response = await fetch('http://<IP_PUBLICA_OCI>:8000/api/generate-config', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+});
+
+```
 ## 🤝 Contribuciones
 
 Las contribuciones son bienvenidas. Para cambios mayores, abre un *issue* primero para discutir lo que te gustaría modificar o mejorar.

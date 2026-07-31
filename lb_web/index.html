@@ -4,110 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuración de Conexiones - SmartVista Load Balancer</title>
-    <style>
-        :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --primary-color: #0056b3;
-            --primary-hover: #004085;
-            --border-color: #cccccc;
-            --text-color: #333333;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .help-text {
-            font-size: 0.85em;
-            color: #666;
-            margin-bottom: 6px;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-
-        input[type="text"]:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            transition: background-color 0.2s ease;
-        }
-
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        button:disabled {
-            background-color: #888888;
-            cursor: not-allowed;
-        }
-
-        .output-panel {
-            margin-top: 25px;
-            padding: 15px;
-            background-color: #272822;
-            color: #f8f8f2;
-            border-radius: 4px;
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -142,7 +39,7 @@
         <div class="form-group">
             <label for="mhdrPreset">Modo de Enmarcado / Cabecera (`mhdr`):</label>
             <div class="help-text">Seleccione un formato predefinido o personalizado.</div>
-            <select id="mhdrPreset" onchange="toggleCustomHeader(this.value)">
+            <select id="mhdrPreset">
                 <option value="CDb4">CDb4 (Caracteres, Decimal, Big-Endian, 4 Bytes)</option>
                 <option value="BHb2">BHb2 (Binario, Hexadecimal, Big-Endian, 2 Bytes)</option>
                 <option value="visa">visa (Redes Visa Base I / SMS)</option>
@@ -162,74 +59,10 @@
     </form>
 
     <!-- Panel para mostrar el resultado JSON -->
-    <div id="outputPanel" class="output-panel"></div>
+    <div id="outputPanel" class="output-panel" role="status" aria-live="polite"></div>
 </div>
 
-<script>
-    function toggleCustomHeader(value) {
-        const customGroup = document.getElementById('customHeaderGroup');
-        const customInput = document.getElementById('customMhdr');
-        if (value === 'custom') {
-            customGroup.style.display = 'block';
-            customInput.required = true;
-        } else {
-            customGroup.style.display = 'none';
-            customInput.required = false;
-        }
-    }
-
-    document.getElementById('slbForm').addEventListener('submit', async function(e) { 
-        e.preventDefault(); 
-        
-        const outputPanel = document.getElementById('outputPanel'); 
-        const submitBtn = e.target.querySelector('button[type="submit"]'); 
-
-        // Feedback inicial y deshabilita el botón temporalmente 
-        outputPanel.style.display = 'block'; 
-        outputPanel.textContent = "// Enviando datos al flujo de agentes backend..."; 
-        if (submitBtn) submitBtn.disabled = true; 
-
-        // Extracción de datos del DOM 
-        const customMhdrInput = document.getElementById('customMhdr'); 
-        const payload = { 
-            ip: document.getElementById('ipAddress').value.trim(), 
-            port: document.getElementById('portConfig').value.trim(), 
-            range_count: document.getElementById('portRangeCount').value.trim(), 
-            mhdr_preset: document.getElementById('mhdrPreset').value, 
-            custom_mhdr: customMhdrInput ? customMhdrInput.value.trim() : "" 
-        }; 
-
-        try { 
-            const response = await fetch('http://127.0.0.1:8000/api/generate-config', { 
-                method: 'POST', 
-                headers: { 
-                    'Content-Type': 'application/json' 
-                }, 
-                body: JSON.stringify(payload) 
-            }); 
-
-            const data = await response.json(); 
-
-            if (!response.ok) { 
-                const errorMsg = typeof data.detail === 'object' 
-                    ? JSON.stringify(data.detail, null, 2) 
-                    : data.detail; 
-                outputPanel.textContent = `// ERROR DE VALIDACIÓN:\n${errorMsg}`; 
-                return; 
-            } 
-
-            // Éxito: Imprime la configuración generada por los agentes 
-            outputPanel.textContent = "// Resultado Procesado por Agentes SVLB:\n" + 
-                                      JSON.stringify(data.generated_config, null, 4); 
-
-        } catch (error) { 
-            outputPanel.textContent = "// Error de conexión con el backend multiagente.\n" + 
-                                      "Asegúrate de que Uvicorn esté corriendo en http://127.0.0.1:8000"; 
-        } finally { 
-            if (submitBtn) submitBtn.disabled = false; 
-        } 
-    });
-</script>
+<script src="app.js" defer></script>
 
 </body>
 </html>

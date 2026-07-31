@@ -3,6 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 import re
+from fastapi.responses import JSONResponse, FileResponse
+import json
+import os
+from dotenv import load_dotenv
+
+# Carga las variables de entorno desde el archivo .env
+load_dotenv()
+
+# Define las variables de entorno
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+TAVILY_API_KEY = os.getenv('TAVILY_API_KEY')
 
 app = FastAPI(title="SVLB Multi-Agent Orchestrator")
 
@@ -21,6 +32,9 @@ class SVLBRequest(BaseModel):
     range_count: Optional[str] = None
     mhdr_preset: str
     custom_mhdr: Optional[str] = None
+
+class UserStoryRequest(BaseModel):
+    user_story: str
 
 # --- LÓGICA DE LOS AGENTES ---
 
@@ -97,3 +111,28 @@ async def process_svlb_config(payload: SVLBRequest):
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error interno al procesar la configuración.")
+
+@app.post("/api/process-user-story")
+async def handle_user_story(req: UserStoryRequest):
+    # Cargar contexto de los documentos guardados en la VM
+    from document_reader import read_docx, read_excel_config
+    from nodes.user_story_agent import process_user_story
+
+    docx_path = "SmartVista Load Balancer-Credibanco.docx"
+    excel_path = "Configurador Load Balancer.xlsx"
+
+    docx_text = read_docx(docx_path) if os.path.exists(docx_path) else ""
+    excel_text = read_excel_config(excel_path) if os.path.exists(excel_path) else ""
+
+    rule_json = process_user_story(req.user_story, docx_text, excel_text)
+
+    # Guardar temporalmente para descarga
+    file_path = "rule_output.json"
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(rule_json, f, indent=4, ensure_ascii=False)
+
+    return JSONResponse(content={"status": "success", "data": rule_json, "download_url": "/api/download-json"})
+
+@app.get("/api/download-json")
+async def download_json():
+    return FileResponse("rule_output.json", filename="smartvista_rule_config.json", media_type="application/json")    

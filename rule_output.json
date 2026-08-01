@@ -1,0 +1,37 @@
+{
+    "environment": "QA",
+    "client": "Banco Caja Social",
+    "load_balancer": {
+        "virtual_ip": "172.29.12.67",
+        "nodes": [
+            {
+                "node_id": 1,
+                "ip": "172.29.12.69"
+            },
+            {
+                "node_id": 2,
+                "ip": "172.29.12.68"
+            }
+        ]
+    },
+    "rules": [
+        {
+            "direction": "SVFE_SERVER",
+            "source_ip": "10.2.32.194",
+            "source_ports": [
+                "330-333",
+                "430-433"
+            ],
+            "role": "server"
+        },
+        {
+            "direction": "SVFE_CLIENT",
+            "destination_ip": "172.19.207.40",
+            "destination_ports": [
+                4180,
+                5180
+            ],
+            "role": "client"
+        }
+    ]
+}

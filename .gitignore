@@ -1,0 +1,5 @@
+.env
+checkpoints.db
+.venv/
+__pycache__/
+.env

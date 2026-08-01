@@ -1,6 +1,6 @@
 {
     "environment": "QA",
-    "client": "Banco Caja Social",
+    "client": "Banco Bogota",
     "load_balancer": {
         "virtual_ip": "172.29.12.67",
         "nodes": [
@@ -17,19 +17,19 @@
     "rules": [
         {
             "direction": "SVFE_SERVER",
-            "source_ip": "10.2.32.194",
+            "source_ip": "10.2.32.13",
             "source_ports": [
-                "330-333",
-                "430-433"
+                "2002",
+                "2003"
             ],
             "role": "server"
         },
         {
             "direction": "SVFE_CLIENT",
-            "destination_ip": "172.19.207.40",
+            "destination_ip": "172.19.206.40",
             "destination_ports": [
-                4180,
-                5180
+                "2180",
+                "2280"
             ],
             "role": "client"
         }
